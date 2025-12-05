@@ -5,6 +5,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/host-grotesk";
 import { Greetings } from "./screens/Greetings";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export function App() {
   const [isFontsLoaded, isFontsError] = useFonts({
@@ -17,5 +18,9 @@ export function App() {
     return null;
   }
 
-  return <Greetings />;
+  return (
+    <SafeAreaProvider>
+      <Greetings />
+    </SafeAreaProvider>
+  );
 }
