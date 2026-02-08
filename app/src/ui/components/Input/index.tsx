@@ -1,17 +1,16 @@
-import { TextInput, BlurEvent, FocusEvent } from "react-native";
+import { TextInput, BlurEvent, FocusEvent, TextInputProps } from "react-native";
 import { inputStyles } from "./styles";
 import { theme } from "@ui/styles/theme";
 import React, { useState } from "react";
 
+type BaseTextInputProps = Omit<TextInputProps, "readOnly">;
+
 interface IInputProps extends BaseTextInputProps {
   error?: boolean;
   disabled?: boolean;
+  InputComponent?: React.ComponentType<TextInputProps>;
+  ref?: React.Ref<TextInput>;
 }
-
-type BaseTextInputProps = Omit<
-  React.ComponentProps<typeof TextInput>,
-  "readOnly"
->;
 
 export function Input({
   style,
@@ -19,6 +18,7 @@ export function Input({
   onBlur,
   error,
   disabled,
+  InputComponent = TextInput,
   ...props
 }: IInputProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -34,7 +34,7 @@ export function Input({
   }
 
   return (
-    <TextInput
+    <InputComponent
       placeholderTextColor={theme.colors.gray[700]}
       style={[
         inputStyles({
