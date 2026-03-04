@@ -33,9 +33,24 @@ export function StepSubtitle({ children }: { children: string }) {
   );
 }
 
-export function StepContent({ children }: { children: React.ReactNode }) {
-  return <View style={styles.content}>{children}</View>;
+// ------ StepContent Scope ------
+
+interface IStepContentProps {
+  children: React.ReactNode;
+  position?: "end" | "center";
 }
+
+export function StepContent({ children, position = "end" }: IStepContentProps) {
+  const isInCenter = position === "center";
+
+  return (
+    <View style={[styles.content, isInCenter && styles.contentCenter]}>
+      {children}
+    </View>
+  );
+}
+
+// ^ ------ StepContent Scope ------ ^
 
 export function StepFooter({ children }: { children: React.ReactNode }) {
   return <View style={styles.footer}>{children}</View>;
