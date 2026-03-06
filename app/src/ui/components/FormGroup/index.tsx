@@ -1,8 +1,8 @@
-import { View } from "react-native";
 import { cloneElement } from "react";
+import { StyleProp, View, ViewStyle } from "react-native";
 
-import { styles } from "./styles";
 import { AppText } from "../AppText";
+import { styles } from "./styles";
 
 import { theme } from "@ui/styles/theme";
 
@@ -10,11 +10,12 @@ interface IFormGroupProps {
   label: string;
   children: React.ReactElement<{ error?: boolean }>;
   error?: string;
+  style: StyleProp<ViewStyle>;
 }
 
-export function FormGroup({ label, children, error }: IFormGroupProps) {
+export function FormGroup({ label, children, error, style }: IFormGroupProps) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <AppText weight="medium">{label}</AppText>
       {cloneElement(children, { error: !!error })}
       {error && (
