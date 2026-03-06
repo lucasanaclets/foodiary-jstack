@@ -10,7 +10,7 @@ interface IFormGroupProps {
   label: string;
   children: React.ReactElement<{ error?: boolean }>;
   error?: string;
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 }
 
 export function FormGroup({ label, children, error, style }: IFormGroupProps) {

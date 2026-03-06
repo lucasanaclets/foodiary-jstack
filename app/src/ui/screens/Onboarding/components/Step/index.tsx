@@ -52,6 +52,21 @@ export function StepContent({ children, position = "end" }: IStepContentProps) {
 
 // ^ ------ StepContent Scope ------ ^
 
-export function StepFooter({ children }: { children: React.ReactNode }) {
-  return <View style={styles.footer}>{children}</View>;
+// ------ StepFooter Scope ------
+
+interface StepFooterProps {
+  children: React.ReactNode;
+  align?: "start" | "end";
 }
+
+export function StepFooter({ children, align = "end" }: StepFooterProps) {
+  return (
+    <View
+      style={[styles.footer, align === "end" && { alignItems: "flex-end" }]}
+    >
+      {children}
+    </View>
+  );
+}
+
+// ^ ------ StepFooter Scope ------ ^
