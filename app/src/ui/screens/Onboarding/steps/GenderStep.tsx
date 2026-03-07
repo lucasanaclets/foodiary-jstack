@@ -1,3 +1,4 @@
+import { Gender } from "@app/types/Gender";
 import { Button } from "@ui/components/Button";
 import {
   RadioGroup,
@@ -16,11 +17,6 @@ import {
   StepTitle,
 } from "../components/Step";
 import { useOnboarding } from "../context/useOnboarding";
-
-export enum Gender {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-}
 
 export function GenderStep() {
   const { nextStep } = useOnboarding();

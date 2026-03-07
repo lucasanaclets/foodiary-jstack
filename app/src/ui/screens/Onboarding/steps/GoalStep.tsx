@@ -1,3 +1,4 @@
+import { Goal } from "@app/types/Goal";
 import { Button } from "@ui/components/Button";
 import {
   RadioGroup,
@@ -16,12 +17,6 @@ import {
   StepTitle,
 } from "../components/Step";
 import { useOnboarding } from "../context/useOnboarding";
-
-export enum Goal {
-  LOSE = "LOSE",
-  MAINTAIN = "MAINTAIN",
-  GAIN = "GAIN",
-}
 
 export function GoalStep() {
   const { nextStep } = useOnboarding();
