@@ -19,7 +19,7 @@ export const onboardingSchema = z.object({
     })
     .refine(({ password, confirmPassword }) => password === confirmPassword, {
       error: "As senham não coincidem",
-      path: ["confirmPassowrd"],
+      path: ["confirmPassword"],
     }),
 });
 
