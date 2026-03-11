@@ -2,7 +2,8 @@ import { Button } from "@ui/components/Button";
 import { FormGroup } from "@ui/components/FormGroup";
 import { Input } from "@ui/components/Input";
 import { useRef } from "react";
-import { Alert, TextInput, View } from "react-native";
+import { Controller, useFormContext } from "react-hook-form";
+import { TextInput, View } from "react-native";
 import {
   Step,
   StepContent,
@@ -11,15 +12,18 @@ import {
   StepSubtitle,
   StepTitle,
 } from "../components/Step";
+import { OnboardingSchema } from "../schema";
 
 export function CreateAccountStep() {
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
   const confirmPasswordInputRef = useRef<TextInput>(null);
 
-  function handleSubmit() {
-    Alert.alert("Enviar");
-  }
+  const form = useFormContext<OnboardingSchema>();
+
+  const handleSubmit = form.handleSubmit((formData) => {
+    console.log(JSON.stringify(formData, null, 2));
+  });
 
   return (
     <Step>
@@ -30,56 +34,93 @@ export function CreateAccountStep() {
 
       <StepContent>
         <View style={{ gap: 24 }}>
-          <FormGroup label="Nome" style={{}}>
-            <Input
-              placeholder="João Silva"
-              autoCapitalize="words"
-              autoCorrect={false}
-              autoComplete="name"
-              returnKeyType="next"
-              onSubmitEditing={() => emailInputRef.current?.focus()}
-              autoFocus
-            />
-          </FormGroup>
+          <Controller
+            control={form.control}
+            name="account.name"
+            render={({ field, fieldState }) => (
+              <FormGroup error={fieldState.error?.message} label="Nome">
+                <Input
+                  placeholder="João Silva"
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                  autoComplete="name"
+                  returnKeyType="next"
+                  onSubmitEditing={() => emailInputRef.current?.focus()}
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  autoFocus
+                />
+              </FormGroup>
+            )}
+          />
 
-          <FormGroup label="E-mail" style={{}}>
-            <Input
-              ref={emailInputRef}
-              placeholder="joaosilva@gmail.com"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="email"
-              returnKeyType="next"
-              onSubmitEditing={() => passwordInputRef.current?.focus()}
-            />
-          </FormGroup>
+          <Controller
+            control={form.control}
+            name="account.email"
+            render={({ field, fieldState }) => (
+              <FormGroup error={fieldState.error?.message} label="E-mail">
+                <Input
+                  ref={emailInputRef}
+                  placeholder="joaosilva@gmail.com"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  autoComplete="email"
+                  returnKeyType="next"
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  onSubmitEditing={() => passwordInputRef.current?.focus()}
+                />
+              </FormGroup>
+            )}
+          />
 
-          <FormGroup label="Senha" style={{}}>
-            <Input
-              ref={passwordInputRef}
-              placeholder="Mínimo 8 caracteres"
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="new-password"
-              secureTextEntry
-              returnKeyType="next"
-              onSubmitEditing={() => confirmPasswordInputRef.current?.focus()}
-            />
-          </FormGroup>
+          <Controller
+            control={form.control}
+            name="account.password"
+            render={({ field, fieldState }) => (
+              <FormGroup error={fieldState.error?.message} label="Senha">
+                <Input
+                  ref={passwordInputRef}
+                  placeholder="Mínimo 8 caracteres"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  autoComplete="new-password"
+                  secureTextEntry
+                  returnKeyType="next"
+                  onSubmitEditing={() =>
+                    confirmPasswordInputRef.current?.focus()
+                  }
+                  value={field.value}
+                  onChangeText={field.onChange}
+                />
+              </FormGroup>
+            )}
+          />
 
-          <FormGroup label="Confirmar Senha" style={{}}>
-            <Input
-              ref={confirmPasswordInputRef}
-              placeholder="Mínimo 8 caracteres"
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="new-password"
-              secureTextEntry
-              returnKeyType="done"
-              onSubmitEditing={handleSubmit}
-            />
-          </FormGroup>
+          <Controller
+            control={form.control}
+            name="account.confirmPassword"
+            render={({ field, fieldState }) => (
+              <FormGroup
+                error={fieldState.error?.message}
+                label="Confirmar Senha"
+              >
+                <Input
+                  ref={confirmPasswordInputRef}
+                  placeholder="Mínimo 8 caracteres"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  autoComplete="new-password"
+                  secureTextEntry
+                  returnKeyType="done"
+                  onSubmitEditing={handleSubmit}
+                  value={field.value}
+                  onChangeText={field.onChange}
+                />
+              </FormGroup>
+            )}
+          />
         </View>
       </StepContent>
 

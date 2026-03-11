@@ -16,13 +16,15 @@ import {
 import { AppText } from "@ui/components/AppText";
 import { theme } from "@ui/styles/theme";
 import { useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import { Platform, TouchableOpacity } from "react-native";
 import { useOnboarding } from "../context/useOnboarding";
+import { OnboardingSchema } from "../schema";
 
 export function BirthDateStep() {
   const { nextStep } = useOnboarding();
+  const form = useFormContext<OnboardingSchema>();
 
-  const [date, setDate] = useState(new Date());
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(true);
 
   function handleSelectDate(_event: DateTimePickerEvent, newDate?: Date) {
@@ -30,10 +32,18 @@ export function BirthDateStep() {
       return;
     }
 
-    setDate(newDate);
+    form.setValue("birhDate", newDate);
 
     if (Platform.OS === "android") {
       setIsDatePickerVisible(false);
+    }
+  }
+
+  async function handleNextStep() {
+    const isValid = await form.trigger("birhDate");
+
+    if (isValid) {
+      nextStep();
     }
   }
 
@@ -45,30 +55,38 @@ export function BirthDateStep() {
       </StepHeader>
 
       <StepContent position="center">
-        {isDatePickerVisible && (
-          <DateTimePicker
-            value={date}
-            mode="date"
-            display={Platform.OS === "ios" ? "spinner" : "calendar"}
-            onChange={handleSelectDate}
-          />
-        )}
+        <Controller
+          control={form.control}
+          name="birhDate"
+          render={({ field }) => (
+            <>
+              {isDatePickerVisible && (
+                <DateTimePicker
+                  value={field.value}
+                  mode="date"
+                  display={Platform.OS === "ios" ? "spinner" : "calendar"}
+                  onChange={handleSelectDate}
+                />
+              )}
 
-        {Platform.OS === "android" && (
-          <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
-            <AppText
-              weight="semiBold"
-              size="3xl"
-              color={theme.colors.gray[700]}
-            >
-              {formatDate(date)}
-            </AppText>
-          </TouchableOpacity>
-        )}
+              {Platform.OS === "android" && (
+                <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
+                  <AppText
+                    weight="semiBold"
+                    size="3xl"
+                    color={theme.colors.gray[700]}
+                  >
+                    {formatDate(field.value)}
+                  </AppText>
+                </TouchableOpacity>
+              )}
+            </>
+          )}
+        />
       </StepContent>
 
       <StepFooter>
-        <Button size="icon" onPress={nextStep}>
+        <Button size="icon" onPress={handleNextStep}>
           <ArrowRightIcon size={20} color={theme.colors.black[700]} />
         </Button>
       </StepFooter>
